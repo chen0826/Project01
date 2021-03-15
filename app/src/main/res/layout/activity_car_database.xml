@@ -9,12 +9,15 @@
     tools:context=".CarDatabase">
 
     <ListView
+        android:id="@+id/listView"
         android:layout_width="wrap_content"
         android:layout_height="200dp"/>
 
     <Button
+        android:id="@+id/carBtn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="car database"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
