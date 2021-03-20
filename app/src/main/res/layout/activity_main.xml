@@ -12,6 +12,7 @@
     android:id="@+id/image"
     android:src="@drawable/flag"/>
 
+
     <Button
         android:id="@+id/btnTrivia"
         android:layout_width="match_parent"

@@ -40,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         btnCar = findViewById(R.id.btnCar);
+//        Intent goToCar = new Intent(MainActivity.this, CarActivity.class);
+//        btnCar.setOnClickListener( bt->{
+//            startActivity(goToCar);
+//        });
+
         btnCar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

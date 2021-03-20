@@ -14,7 +14,7 @@
         android:layout_height="200dp"/>
 
     <Button
-        android:id="@+id/btnCar"
+        android:id="@+id/btnCardata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="car database"/>
