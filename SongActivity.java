@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.widget.TextView;
 
-public class songstar extends WearableActivity {
+public class SongActivity extends WearableActivity {
 
     private TextView mTextView;
 
