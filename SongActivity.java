@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -258,7 +259,7 @@ private class MyListAdapter extends BaseAdapter {
                 publishProgress(10);
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
-                publishProgress(20);
+                publishProgress(50);
                 //JSON reading:   Look at slide 26
                 //Build the entire string response:
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
@@ -269,13 +270,7 @@ private class MyListAdapter extends BaseAdapter {
                     sb.append(line + "\n");
                 }
                 String result = sb.toString(); //result is the whole string
-                // convert string to JSON: Look at slide 27:
-                JSONObject songReport = new JSONObject(result);
-                publishProgress(50);
-                //get the double associated with "value"
-                double uvRating = songReport.getDouble("value");
-
-                Log.i("MainActivity", "The uv is now: " + uvRating) ;
+                publishProgress(100);
 
             }
             catch (Exception e)
@@ -292,9 +287,24 @@ private class MyListAdapter extends BaseAdapter {
             progressBarSong.setProgress(args[0]);
         }
         //Type3
-        public void onPostExecute(String fromDoInBackground)
-        {
-            Log.i("HTTP", fromDoInBackground);
+        public void onPostExecute(String result)
+        {   // convert string to JSON: Look at slide 27:
+            Log.i("HTTP", result);
+
+            try {
+                JSONObject songReport = new JSONObject(result);
+                Log.i("songactivity", "The json: " + songReport) ;
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //get the double associated with "value"
+            //double uvRating = songReport.getDouble("value");
+            // Log.i("MainActivity", "The uv is now: " + uvRating) ;
+
+
         }
     }
 
