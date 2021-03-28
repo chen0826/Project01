@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class SongOpener extends SQLiteOpenHelper {
 
-    protected final static String DATABASE_NAME = "ContactsDB";
+    protected final static String DATABASE_NAME = "SongDB";
     protected final static int VERSION_NUM = 1;
-    public final static String TABLE_NAME = "CONTACTS";
-    public final static String COL_EMAIL = "EMAIL";
-    public final static String COL_NAME = "NAME";
+    public final static String TABLE_NAME = "SONGS";
+    public final static String COL_SONGTITLE = "SONG_TITLE";
+    public final static String COL_ARTISTNAME= "ARTIST_NAME";
+    public final static String COL_SONGID = "SONG_ID";
+    public final static String COL_ARTISTID = "ARTIST_ID";
     public final static String COL_ID = "_id";
 
     public SongOpener(Context ctx)
@@ -25,12 +27,14 @@ public class SongOpener extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + COL_EMAIL + " text,"
-                + COL_NAME  + " text);");  // add or remove columns
+                + COL_SONGTITLE + " text,"
+                + COL_SONGID + " INTEGER,"
+                + COL_ARTISTNAME + " text,"
+                + COL_ARTISTID + " INTEGER);");  // add or remove columns
     }
 
 
-    //this function gets called if the database version on your device is lower than VERSION_NUM
+//this function gets called if the database version on your device is lower than VERSION_NUM
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {   //Drop the old table:
