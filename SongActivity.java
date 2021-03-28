@@ -6,7 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,34 +19,26 @@ import java.util.Arrays;
 
 
 public class SongActivity extends AppCompatActivity {
-    private ArrayList<String> elements = new ArrayList<>( Arrays.asList( "One", "Two" ) );
-    private MyListAdapter myAdapter;
-
-
+    private ArrayList<SongEntity> songList = new ArrayList<>( );
+    private MyListAdapter mySongAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songstar);
 
-
-        TextView =  findViewById( R.id.text );
-
-
-
-        Button addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener( click -> {
-            elements.add("Hi");
-            myAdapter.notifyDataSetChanged();
-        });
+        ImageView songHeadImage= findViewById( R.id.imageViewSong );
+        EditText searchView =  findViewById( R.id.editTextSearch );
+        ImageButton searchbtn= findViewById(R.id.song_searchButton);
+        ProgressBar progressBar=findViewById(R.id.progressBarSong);
 
 
-        ListView myList = findViewById(R.id.theListView);
-        myList.setAdapter( myAdapter = new MyListAdapter());
-        myList.setOnItemClickListener( (parent, view, pos, id) -> {
+        ListView songListV = findViewById(R.id.listViewSong);
+        songListV.setAdapter( mySongAdapter = new MyListAdapter());
+        songListV.setOnItemClickListener( (parent, view, pos, id) -> {
 
-            elements.remove(pos);
-            myAdapter.notifyDataSetChanged();
+           // songList.remove(pos);
+          //  mySongAdapter.notifyDataSetChanged();
         }   );
 
 
@@ -54,7 +50,7 @@ public class SongActivity extends AppCompatActivity {
 
     private class MyListAdapter extends BaseAdapter {
 
-        public int getCount() { return elements.size();}
+        public int getCount() { return songList.size();}
 
         public Object getItem(int position) { return "This is row " + position; }
 
@@ -65,10 +61,10 @@ public class SongActivity extends AppCompatActivity {
             LayoutInflater inflater = getLayoutInflater();
 
             //make a new row:
-            View newView = inflater.inflate(R.layout.row_layout, parent, false);
+            View newView = inflater.inflate(R.layout.row_listview_song_layout, parent, false);
 
             //set what the text should be for this row:
-            TextView tView = newView.findViewById(R.id.textGoesHere);
+            TextView tView = newView.findViewById(R.id.inputliveV);
             tView.setText( getItem(position).toString() );
 
             //return it to be put in the table
