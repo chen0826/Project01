@@ -34,7 +34,7 @@ public class SongEntity {
     public String getArtistName() {
         return artistName;
     }
-    public int getSongTd() {
+    public int getSongId() {
         return  songId;
     }
     public String getSongTitle() {
