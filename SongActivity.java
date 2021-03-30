@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -251,6 +252,7 @@ private class MyListAdapter extends BaseAdapter {
         //Type3                Type1
         public String doInBackground(String ... args)
         {
+            String result = null;
             try {
 
                 //create a URL object of what server to contact:
@@ -258,28 +260,33 @@ private class MyListAdapter extends BaseAdapter {
                 //open the connection
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 publishProgress(10);
+                Log.i("HTTP", "do in background step one url"+url);
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
                 publishProgress(50);
                 //JSON reading:   Look at slide 26
                 //Build the entire string response:
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+
                 StringBuilder sb = new StringBuilder();
                 String line = null;
                 while ((line = reader.readLine()) != null)
                 {
                     sb.append(line + "\n");
                 }
-                String result = sb.toString(); //result is the whole string
-                publishProgress(100);
+                result = sb.toString(); //result is the whole string
+                Log.i("HTTP", "do in background "+ result );
 
+                publishProgress(100);
+               // return result;
             }
             catch (Exception e)
             {
-
+               e.printStackTrace(); 
             }
 
-            return "Done";
+            return result;
+
         }
 
         //Type 2
@@ -290,12 +297,20 @@ private class MyListAdapter extends BaseAdapter {
         //Type3
         public void onPostExecute(String result)
         {   // convert string to JSON: Look at slide 27:
-            Log.i("HTTP", result);
+          //  Log.i("HTTP", result);
 
             try {
                 JSONObject songReport = new JSONObject(result);
-                Log.i("songactivity", "The json: " + songReport) ;
+               // Log.i("songactivity", "The json: " + songReport) ;
+                JSONArray  array=songReport.getJSONArray("data");
+                for (int i=0; i < array.length();i++){
 
+                    JSONObject jsonObject= array.getJSONObject(i);
+                    String id=jsonObject.getString("id");
+                    boolean bb=jsonObject.getBoolean()
+
+
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
