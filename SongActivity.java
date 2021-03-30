@@ -63,7 +63,7 @@ public class SongActivity extends AppCompatActivity {
             String searchterm=searchView.getText().toString();
             // http://www.songsterr.com/a/ra/songs.xml?pattern=XXX
             // http://www.songsterr.com/a/ra/songs.json?pattern=XXX
-            String songJsonURL="http://www.songsterr.com/a/ra/songs.json?pattern="+searchterm;
+            String songJsonURL="https://www.songsterr.com/a/ra/songs.json?pattern="+searchterm;
             progressBarSong.setVisibility( VISIBLE );
             MySongHTTPRequest songReq = new MySongHTTPRequest();
             songReq.execute(songJsonURL);  //Type 1
@@ -295,22 +295,34 @@ private class MyListAdapter extends BaseAdapter {
             progressBarSong.setProgress(args[0]);
         }
         //Type3
-        public void onPostExecute(String result)
+        public void onPostExecute(String str)
         {   // convert string to JSON: Look at slide 27:
-          //  Log.i("HTTP", result);
+            Log.i("HTTP", str.toString());
+            //Log.d("data", s.toString());
+            JSONArray  jsonArray=null;
+           try {
 
-            try {
-                JSONObject songReport = new JSONObject(result);
-               // Log.i("songactivity", "The json: " + songReport) ;
-                JSONArray  array=songReport.getJSONArray("data");
-                for (int i=0; i < array.length();i++){
+               jsonArray= new JSONArray(str);
+               for (int i=0; i < jsonArray.length(); i++){
 
-                    JSONObject jsonObject= array.getJSONObject(i);
-                    String id=jsonObject.getString("id");
-                    boolean bb=jsonObject.getBoolean()
+                   JSONObject jsonObject= null;
+                   try {
+                       jsonObject = jsonArray.getJSONObject(i);
+                       String songIdStr=jsonObject.getString("id");
+                       String songTitle=jsonObject.getString("title");
+                       JSONObject jsonObjectAtrist= jsonObject.getJSONObject("artist");
+                       String artistIdStr=jsonObjectAtrist.getString("id");
+                       String artistName=jsonObjectAtrist.getString("name");
+                       Integer songId= Integer.valueOf(songIdStr);
+                       int artistId=Integer.parseInt(artistIdStr);
+                       SongEntity songrow= new SongEntity(songTitle, songId, artistName, artistId, i);
+                       songList.add(songrow);
+                       } catch (JSONException jsonException) {
+                           jsonException.printStackTrace();
+                       }
 
 
-                }
+               }
 
             } catch (JSONException e) {
                 e.printStackTrace();
