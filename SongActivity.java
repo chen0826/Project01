@@ -211,7 +211,7 @@ private class MyListAdapter extends BaseAdapter {
 
         public Object getItem(int position) { return songList.get( position); }
 
-       // public long getItemId(int position) { return (long) position; }
+        public long getItemId(int position) { return (long) position; }
 
         public View getView(int position, View old, ViewGroup parent)
         {
@@ -238,11 +238,12 @@ private class MyListAdapter extends BaseAdapter {
 
             return newView;
         }
+       /*
         public long getItemId(int position)
         {
             return getItem(position).getId();
         }
-
+        */
     }
 
     private class MySongHTTPRequest extends AsyncTask< String, Integer, String>
