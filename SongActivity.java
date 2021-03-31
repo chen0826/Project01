@@ -1,6 +1,7 @@
 package com.cst2335.project01;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.KeyboardView;
 import android.os.AsyncTask;
@@ -171,6 +172,10 @@ public class SongActivity extends AppCompatActivity {
         artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
         artistName.setText("artist name: "+ selectedSong.getArtistName());
 
+        Bundle dataToPass = new Bundle();
+        dataToPass.putString(ITEM_SELECTED, source.get(position) );
+        dataToPass.putInt(ITEM_POSITION, position);
+        dataToPass.putLong(ITEM_ID, id);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -178,6 +183,10 @@ public class SongActivity extends AppCompatActivity {
                 .setMessage("You like save it to your favorite?")
                 .setView(song_view) //add the 3 edit texts showing the contact information
                 .setPositiveButton("Yes", (click, b) -> {
+
+                    Intent nextActivity = new Intent(this, favoritySongActivity.class);
+                    nextActivity.putExtras(dataToPass); //send data to next activity
+                    startActivity(nextActivity); //make the transition
                    // selectedSong.update(rowName.getText().toString(), rowEmail.getText().toString());
                    // updateContact(selectedContact);
                   //  myAdapter.notifyDataSetChanged(); //the email and name have changed so rebuild the list
