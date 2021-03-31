@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -156,37 +157,43 @@ public class SongActivity extends AppCompatActivity {
 
     protected void showSong(int position)
     {
-       /* SongEntity selectedSong = .get(position);
 
-        View contact_view = getLayoutInflater().inflate(R.layout.contact_edit, null);
-        //get the TextViews
-        EditText rowName = contact_view.findViewById(R.id.row_name);
-        EditText rowEmail = contact_view.findViewById(R.id.row_email);
-        TextView rowId = contact_view.findViewById(R.id.row_id);
+        SongEntity selectedSong = songList.get(position);
+        View song_view = getLayoutInflater().inflate(R.layout.selected_song_dialog, null);
 
-        //set the fields for the alert dialog
-        rowName.setText(selectedContact.getName());
-        rowEmail.setText(selectedContact.getEmail());
-        rowId.setText("id:" + selectedContact.getId());
+        TextView songId=song_view.findViewById(R.id.row_songId_d);
+        TextView songtitle=song_view.findViewById(R.id.row_songTitle_d);
+        TextView artistName=song_view.findViewById(R.id.row_artistName_d);
+        TextView artistId=song_view.findViewById(R.id.row_artistId_d);
+
+        songId.setText("songID:"+String.valueOf( selectedSong.getSongId()));
+        songtitle.setText("Title: "+selectedSong.getSongTitle());
+        artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
+        artistName.setText("artist name: "+ selectedSong.getArtistName());
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You clicked on item #" + position)
-                .setMessage("You can update the fields and then click update to save in the database")
-                .setView(contact_view) //add the 3 edit texts showing the contact information
-                .setPositiveButton("Update", (click, b) -> {
-                    selectedContact.update(rowName.getText().toString(), rowEmail.getText().toString());
-                    updateContact(selectedContact);
-                    myAdapter.notifyDataSetChanged(); //the email and name have changed so rebuild the list
+        builder.setTitle("You clicked on Song #" + position)
+                .setMessage("You like save it to your favorite?")
+                .setView(song_view) //add the 3 edit texts showing the contact information
+                .setPositiveButton("Yes", (click, b) -> {
+                   // selectedSong.update(rowName.getText().toString(), rowEmail.getText().toString());
+                   // updateContact(selectedContact);
+                  //  myAdapter.notifyDataSetChanged(); //the email and name have changed so rebuild the list
                 })
-                .setNegativeButton("Delete", (click, b) -> {
-                    deleteContact(selectedContact); //remove the contact from database
-                    contactsList.remove(position); //remove the contact from contact list
-                    myAdapter.notifyDataSetChanged(); //there is one less item so update the list
+                .setNegativeButton("No", (click, b) -> {
+                   // deleteContact(selectedContact); //remove the contact from database
+                  //  contactsList.remove(position); //remove the contact from contact list
+                  //  myAdapter.notifyDataSetChanged(); //there is one less item so update the list
                 })
-                .setNeutralButton("dismiss", (click, b) -> { })
+                .setNeutralButton("dismiss", (click, b) -> {
+
+
+                })
                 .create().show();
 
-        */
+
     }
 /*
     protected void updateSong(SongEntity s)
@@ -240,12 +247,6 @@ private class MySongListAdapter extends BaseAdapter {
 
             return newView;
         }
-       /*
-        public long getItemId(int position)
-        {
-            return getItem(position).getId();
-        }
-        */
     }
 
     private class MySongHTTPRequest extends AsyncTask< String, Integer, String>
@@ -276,19 +277,14 @@ private class MySongListAdapter extends BaseAdapter {
                 }
                 result = sb.toString(); //result is the whole string
                 Log.i("HTTP", "do in background "+ result );
-
                 publishProgress(100);
-               // return result;
             }
             catch (Exception e)
             {
                e.printStackTrace(); 
             }
-
             return result;
-
         }
-
         //Type 2
         public void onProgressUpdate(Integer ... args)
         {
@@ -321,25 +317,14 @@ private class MySongListAdapter extends BaseAdapter {
                        } catch (JSONException jsonException) {
                            jsonException.printStackTrace();
                        }
-
-
                }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
             mySongAdapter.notifyDataSetChanged();
             progressBarSong.setVisibility(View.GONE);
             searchView.setText("");
-
-
-            //get the double associated with "value"
-            //double uvRating = songReport.getDouble("value");
-            // Log.i("MainActivity", "The uv is now: " + uvRating) ;
-
-
         }
     }
 
