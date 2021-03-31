@@ -38,10 +38,8 @@ import static android.view.View.VISIBLE;
 public class SongActivity extends AppCompatActivity {
     ArrayList<SongEntity> songList = new ArrayList<>( );
     MySongListAdapter mySongAdapter;
-    //ArrayList<Contact> contactsList = new ArrayList<>();
     private static int ACTIVITY_VIEW_SONGLIST = 33;
     int positionClicked = 0;
-    //MyOwnAdapter myAdapter;
     SQLiteDatabase db;
     ProgressBar progressBarSong;
     ListView songListV;
@@ -69,46 +67,20 @@ public class SongActivity extends AppCompatActivity {
             progressBarSong.setVisibility( VISIBLE );
             MySongHTTPRequest songReq = new MySongHTTPRequest();
             songReq.execute(songJsonURL);  //Type 1
-
-                 /*
-                    ContentValues newRowValues = new ContentValues();
-                    //put string name in the NAME column:
-                    newRowValues.put(SongOpener.COL_NAME, name);
-                    newRowValues.put(SongOpener.COL_NAME, name);
-
-
-                    //put string email in the EMAIL column:
-                    newRowValues.put(SongOpener.COL_EMAIL, email);
-
-                    //Now insert in the database:
-                    long newId = db.insert(SongOpener.TABLE_NAME, null, newRowValues);
-
-                    //now you have the newId, you can create the Contact object
-                    Contact newContact = new Contact(name, email, newId);
-
-                    //add the new contact to the list:
-                    contactsList.add(newContact);
-                    //update the listView:
-                    myAdapter.notifyDataSetChanged();
-
-                    //clear the EditText fields:
-                    nameEdit.setText("");
-                    emailEdit.setText("");
-
-                    //Show the id of the inserted item:
-                    Toast.makeText(this, "Inserted item id:"+newId, Toast.LENGTH_LONG).show();
-                 */
-                });
+        });
 
 
         songListV = findViewById(R.id.listViewSong);
-      //  loadDataFromDatabase(); //get any previously saved songlist objects
-
-       // songListV.setAdapter( mySongAdapter = new MyListAdapter());
-       // mySongAdapter.notifyDataSetChanged();
         songListV.setOnItemClickListener( (parent, view, position, id) -> {
           showSong (position);
         }   );
+
+        boolean isTablet = findViewById(R.id.fragmentLocation_song) != null; //check if the FrameLayout is loaded
+
+
+
+
+
 
 
 
@@ -171,12 +143,12 @@ public class SongActivity extends AppCompatActivity {
         songtitle.setText("Title: "+selectedSong.getSongTitle());
         artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
         artistName.setText("artist name: "+ selectedSong.getArtistName());
-
+/*
         Bundle dataToPass = new Bundle();
         dataToPass.putString(ITEM_SELECTED, source.get(position) );
         dataToPass.putInt(ITEM_POSITION, position);
         dataToPass.putLong(ITEM_ID, id);
-
+*/
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("You clicked on Song #" + position)
@@ -184,7 +156,7 @@ public class SongActivity extends AppCompatActivity {
                 .setView(song_view) //add the 3 edit texts showing the contact information
                 .setPositiveButton("Yes", (click, b) -> {
 
-                    Intent nextActivity = new Intent(this, favoritySongActivity.class);
+                    Intent nextActivity = new Intent(this, FavoritySongActivity.class);
                     nextActivity.putExtras(dataToPass); //send data to next activity
                     startActivity(nextActivity); //make the transition
                    // selectedSong.update(rowName.getText().toString(), rowEmail.getText().toString());
