@@ -1,9 +1,8 @@
 package com.cst2335.project01;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.database.Cursor;
+import android.accessibilityservice.AccessibilityService;
 import android.database.sqlite.SQLiteDatabase;
+import android.inputmethodservice.KeyboardView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -33,20 +29,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.view.View.VISIBLE;
 
 
 public class SongActivity extends AppCompatActivity {
     ArrayList<SongEntity> songList = new ArrayList<>( );
-    MyListAdapter mySongAdapter;
+    MySongListAdapter mySongAdapter;
     //ArrayList<Contact> contactsList = new ArrayList<>();
     private static int ACTIVITY_VIEW_SONGLIST = 33;
     int positionClicked = 0;
     //MyOwnAdapter myAdapter;
     SQLiteDatabase db;
     ProgressBar progressBarSong;
+    ListView songListV;
+    EditText searchView;
 
 
     @Override
@@ -55,12 +52,15 @@ public class SongActivity extends AppCompatActivity {
         setContentView(R.layout.activity_songstar);
 
         ImageView songHeadImage= findViewById( R.id.imageViewSong );
-        EditText searchView =  findViewById( R.id.editTextSearch );
+        searchView =  findViewById( R.id.editTextSearch );
+        searchView.requestFocus();
         ImageButton searchBtn= findViewById(R.id.song_searchButton);
         progressBarSong=findViewById(R.id.progressBarSong);
 
-        searchBtn.setOnClickListener( click ->                {
-            String searchterm=searchView.getText().toString();
+        searchBtn.setOnClickListener( click -> {
+
+            String searchterm="";
+            searchterm=searchView.getText().toString();
             // http://www.songsterr.com/a/ra/songs.xml?pattern=XXX
             // http://www.songsterr.com/a/ra/songs.json?pattern=XXX
             String songJsonURL="https://www.songsterr.com/a/ra/songs.json?pattern="+searchterm;
@@ -99,10 +99,11 @@ public class SongActivity extends AppCompatActivity {
                 });
 
 
-        ListView songListV = findViewById(R.id.listViewSong);
+        songListV = findViewById(R.id.listViewSong);
       //  loadDataFromDatabase(); //get any previously saved songlist objects
 
-        songListV.setAdapter( mySongAdapter = new MyListAdapter());
+       // songListV.setAdapter( mySongAdapter = new MyListAdapter());
+       // mySongAdapter.notifyDataSetChanged();
         songListV.setOnItemClickListener( (parent, view, position, id) -> {
           showSong (position);
         }   );
@@ -154,8 +155,8 @@ public class SongActivity extends AppCompatActivity {
 */
 
     protected void showSong(int position)
-    {   /*
-        Contact selectedContact = contactsList.get(position);
+    {
+       /* SongEntity selectedSong = .get(position);
 
         View contact_view = getLayoutInflater().inflate(R.layout.contact_edit, null);
         //get the TextViews
@@ -206,7 +207,7 @@ public class SongActivity extends AppCompatActivity {
 
 */
 
-private class MyListAdapter extends BaseAdapter {
+private class MySongListAdapter extends BaseAdapter {
 
         public int getCount() { return songList.size();}
 
@@ -219,7 +220,7 @@ private class MyListAdapter extends BaseAdapter {
             LayoutInflater inflater = getLayoutInflater();
 
             //make a new row:
-             View newView = inflater.inflate(R.layout.row_listview_song_layout, parent, false);
+             View newView = inflater.inflate(R.layout.row_song_layout, parent, false);
 
             //set what the text should be for this row:
             SongEntity songRow= (SongEntity) getItem(position);
@@ -231,11 +232,11 @@ private class MyListAdapter extends BaseAdapter {
             TextView rowId = (TextView)newView.findViewById(R.id.row_id);
 
 
-            songTitle.setText(  songRow.getSongTitle());
-            songId.setText(  songRow.getSongId());
-            artistName.setText(  songRow.getArtistName());
-            artistId.setText(  songRow.getArtistId());
-            rowId.setText("id:" + songRow.getId());
+            songTitle.setText(songRow.getSongTitle());
+            songId.setText( "songID: " +String.valueOf(songRow.getSongId()));
+            artistName.setText( "artist name: "+ songRow.getArtistName());
+            artistId.setText( "artistID: "+ String.valueOf(songRow.getArtistId()));
+             rowId.setText("list No:" +String.valueOf(songRow.getId()) );
 
             return newView;
         }
@@ -254,9 +255,8 @@ private class MyListAdapter extends BaseAdapter {
         {
             String result = null;
             try {
-
-                //create a URL object of what server to contact:
-                URL url = new URL(args[0]);
+                URL url= null;
+                url = new URL(args[0]);
                 //open the connection
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 publishProgress(10);
@@ -300,6 +300,7 @@ private class MyListAdapter extends BaseAdapter {
             Log.i("HTTP", str.toString());
             //Log.d("data", s.toString());
             JSONArray  jsonArray=null;
+            songList.clear();
            try {
 
                jsonArray= new JSONArray(str);
@@ -327,6 +328,12 @@ private class MyListAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
+            mySongAdapter.notifyDataSetChanged();
+            progressBarSong.setVisibility(View.GONE);
+            searchView.setText("");
+
 
             //get the double associated with "value"
             //double uvRating = songReport.getDouble("value");
