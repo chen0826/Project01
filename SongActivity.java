@@ -46,6 +46,11 @@ public class SongActivity extends AppCompatActivity {
     EditText searchView;
 
 
+    public static final String ITEM_SONG_TITLE= "SONGTITLE";
+    public static final String ITEM_SONG_ID = "SONGID";
+    public static final String  ITEM_ARTIST_NAME= "ARTISTNAME";
+    public static final String  ITEM_ARTIST_ID= "ARTISTID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,12 +76,47 @@ public class SongActivity extends AppCompatActivity {
 
 
         songListV = findViewById(R.id.listViewSong);
-        songListV.setOnItemClickListener( (parent, view, position, id) -> {
-          showSong (position);
-        }   );
+        songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
+        mySongAdapter.notifyDataSetChanged();
+       // songListV.setOnItemClickListener( (parent, view, position, id) -> {
+       //   showSong (position);
+      //  }   );
 
         boolean isTablet = findViewById(R.id.fragmentLocation_song) != null; //check if the FrameLayout is loaded
+        songListV.setOnItemClickListener( (parent, view, position, id) -> {
 
+            SongEntity selectedSong = songList.get(position);
+            Bundle dataToPass = new Bundle();
+
+            dataToPass.putString( ITEM_SONG_TITLE, selectedSong.getSongTitle());
+            dataToPass.putInt( ITEM_SONG_ID, selectedSong.getSongId() );
+            dataToPass.putString( ITEM_ARTIST_NAME, selectedSong.getArtistName());
+            dataToPass.putInt( ITEM_ARTIST_ID, selectedSong.getArtistId() );
+
+           /*
+            songId.setText("songID:"+String.valueOf( selectedSong.getSongId()));
+            songtitle.setText("Title: "+selectedSong.getSongTitle());
+            artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
+            artistName.setText("artist name: "+ selectedSong.getArtistName());
+
+            */
+
+            if(isTablet)
+            {
+                SongDetailFragment dFragment = new SongDetailFragment(); //add a DetailFragment
+                dFragment.setArguments( dataToPass ); //pass it a bundle for information
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentLocation, dFragment) //Add the fragment in FrameLayout
+                        .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+            }
+            else //isPhone
+            {
+                Intent nextActivity = new Intent(SongActivity.this, SongSecondActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivity(nextActivity); //make the transition
+            }
+        });
 
 
 
@@ -127,7 +167,7 @@ public class SongActivity extends AppCompatActivity {
         //At this point, the contactsList array has loaded every row from the cursor.
     }
 */
-
+/*
     protected void showSong(int position)
     {
 
@@ -143,12 +183,12 @@ public class SongActivity extends AppCompatActivity {
         songtitle.setText("Title: "+selectedSong.getSongTitle());
         artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
         artistName.setText("artist name: "+ selectedSong.getArtistName());
-/*
+
         Bundle dataToPass = new Bundle();
         dataToPass.putString(ITEM_SELECTED, source.get(position) );
         dataToPass.putInt(ITEM_POSITION, position);
         dataToPass.putLong(ITEM_ID, id);
-*/
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("You clicked on Song #" + position)
@@ -156,12 +196,6 @@ public class SongActivity extends AppCompatActivity {
                 .setView(song_view) //add the 3 edit texts showing the contact information
                 .setPositiveButton("Yes", (click, b) -> {
 
-                    Intent nextActivity = new Intent(this, FavoritySongActivity.class);
-                    nextActivity.putExtras(dataToPass); //send data to next activity
-                    startActivity(nextActivity); //make the transition
-                   // selectedSong.update(rowName.getText().toString(), rowEmail.getText().toString());
-                   // updateContact(selectedContact);
-                  //  myAdapter.notifyDataSetChanged(); //the email and name have changed so rebuild the list
                 })
                 .setNegativeButton("No", (click, b) -> {
                    // deleteContact(selectedContact); //remove the contact from database
@@ -176,6 +210,8 @@ public class SongActivity extends AppCompatActivity {
 
 
     }
+ */
+
 /*
     protected void updateSong(SongEntity s)
     {
@@ -195,7 +231,9 @@ public class SongActivity extends AppCompatActivity {
 
 */
 
-private class MySongListAdapter extends BaseAdapter {
+
+
+            class MySongListAdapter extends BaseAdapter {
 
         public int getCount() { return songList.size();}
 
@@ -302,23 +340,11 @@ private class MySongListAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
+            //songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
             mySongAdapter.notifyDataSetChanged();
             progressBarSong.setVisibility(View.GONE);
             searchView.setText("");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
