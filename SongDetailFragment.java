@@ -28,10 +28,11 @@ import android.widget.Toast;
 public class SongDetailFragment extends Fragment {
 
 
+    public static final int REQUIRED_CODE = 222;
     private Bundle dataFromActivity;
     private long id;
     private AppCompatActivity parentActivity;
-    SQLiteDatabase db;
+    SQLiteDatabase songDb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,90 +70,66 @@ public class SongDetailFragment extends Fragment {
         TextView idView = (TextView) result1.findViewById(R.id.row_head);
         idView.setText("Song From List ID=" + id);
 
-        // get the delete button, and add a click listener:
-        Button saveTofavorateBtn = (Button) result1.findViewById(R.id.savetofavourite_btn);
-        saveTofavorateBtn.setOnClickListener( click -> {
-            Log.i( "SAVE", "savaclicked");
-            Toast.makeText( parentActivity.getBaseContext(), " than invoice",
-                    Toast.LENGTH_SHORT).show();
-            /*
-            int song_id_ts=dataFromActivity.getInt(SongActivity.ITEM_SONG_ID);
+        Button saveBtn = (Button) result1.findViewById(R.id.button_save);
+        saveBtn.setOnClickListener( clk -> {
 
-            String song_title_ts=songTitleV.getText().toString();
-            String aritist_name_ts=artistNameV.getText().toString();
-            int artist_id_ts=dataFromActivity.getInt(SongActivity.ITEM_ARTIST_ID);
-            long idinDB=saveTofavorateDBgetID( song_title_ts,  song_id_ts, aritist_name_ts,  artist_id_ts);
-            String msg="success save to favoirt DB id:"+String.valueOf(idinDB);
-            Log.i( "SAVE", msg );
-            makeToastnotice( msg );
-            // get toast to notice save success
-             */
+                    Log.i( "button ", "savesave!!!!!!!!!!!!!!" );
 
 
+                    int song_id_ts = dataFromActivity.getInt( SongActivity.ITEM_SONG_ID );
+                    String song_title_ts = songTitleV.getText().toString();
+                    String aritist_name_ts = artistNameV.getText().toString();
+                    int artist_id_ts = dataFromActivity.getInt( SongActivity.ITEM_ARTIST_ID );
+            Log.i( "HTTP", "***********"+aritist_name_ts+song_title_ts
+                    +String.valueOf( song_id_ts )+song_title_ts
+                    +String.valueOf( artist_id_ts )
+            );
+                   long idinDB = saveTofavorateDBgetId( song_title_ts, song_id_ts, aritist_name_ts, artist_id_ts );
+                    String msg = "success save to favoirte DB id:"+ String.valueOf( idinDB );
+                    Log.i( "SAVE", msg );
+                    // get toast to notice save success
+                    makeToastnotice( msg );
+                });
 
-            //songFavourateList.add(new SongEntity( songTitle, songId, artistName, artistId, id));
-            /*
-             String textMsg = msgText.getText().toString();
-            long id = saveMsgToDBAndGetID( textMsg, true );//return id and insert db sametime
-            Message message = new Message( textMsg, true, id );
-            messageList.add( message );
-            myAdapter.notifyDataSetChanged();
-            msgText.setText( " " );
-             */
+        Button deleBtn = (Button) result1.findViewById(R.id.button_dele);
+        deleBtn.setOnClickListener( clk -> {
+            Log.i( "button ", "ddddddddd!!!!!!!!!!!!!!!!!!!!!!");
+           parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+                });
 
+        Button gotoBtn = (Button) result1.findViewById(R.id.button_goto);
+        gotoBtn.setOnClickListener( clk -> {
 
-           // parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
-        });
-
-        Button seeFavouriteBtu = (Button) result1.findViewById(R.id.goFavourite_btn);
-        seeFavouriteBtu.setOnClickListener( clk -> {
+            Log.i( "button ", "gggggggggggg!!!!!!!!!!!!!!");
 
             Intent nextActivity = new Intent(getContext(), SongThirdActivity.class);
             //nextActivity.putExtras(dataToPass); //send data to next activity
-            startActivityForResult(nextActivity, 111); //make the transition
-            //Tell the parent activity to remove
-            // parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+            startActivityForResult(nextActivity, REQUIRED_CODE); //make the transition
         });
-
         return result1;
-
+    }
     private void makeToastnotice(String  msg) {
-        Toast toast= Toast.makeText( parentActivity.getApplicationContext(),
+        Toast toast = Toast.makeText( parentActivity.getApplicationContext(),
                 msg, Toast.LENGTH_LONG );
-        toast.setGravity( Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,80);
         toast.show();
-
     }
 
-    private long saveTofavorateDBgetID(String song_title_ts, int song_id_ts, String aritist_name_ts, int artist_id_ts) {
-        ContentValues newSongValues = new ContentValues();
 
-        newSongValues.put(SongOpener.COL_SONGID, song_id_ts);
-        newSongValues.put(SongOpener.COL_SONGTITLE, song_title_ts);
-        newSongValues.put(SongOpener.COL_ARTISTID, artist_id_ts);
-        newSongValues.put(SongOpener.COL_ARTISTNAME, aritist_name_ts);
-        Long newID=db.insert(SongOpener.TABLE_NAME,null,newSongValues);
-        return newID;
-  /*
-
-    //need rewrite to songdb
-    private long saveMsgToDBAndGetID(String textMsg, boolean issentB) {
-        //convert issent from boolean to int 1 or 0
-        int issentI = issentB ? 1:0 ;
-        ContentValues newMessagerValues = new ContentValues();
-        newMessagerValues.put( MyOpener.COL_MESSAGE, textMsg);
-        newMessagerValues.put(  MyOpener.COL_ISSENT, issentI );
-        long newId = db.insert( MyOpener.TABLE_NAME, null, newMessagerValues );
-        return newId;
-    }
-
- */
-
-
-
-
-
-    }
+    private long saveTofavorateDBgetId( String songtitlets, int song_id_ts, String  aritistnamets, int artist_id_ts)
+        {
+            SongOpener dbOpener = new SongOpener(getContext());
+            songDb = dbOpener.getWritableDatabase();
+            ContentValues newSongValue = new ContentValues();
+            newSongValue.put( SongOpener.COL_SONGID, song_id_ts );
+            newSongValue.put( SongOpener.COL_SONGTITLE, songtitlets );
+            newSongValue.put( SongOpener.COL_ARTISTID, artist_id_ts );
+            newSongValue.put( SongOpener.COL_ARTISTNAME, aritistnamets );
+            if(newSongValue!=null && !newSongValue.isEmpty()){
+            long newIdd = songDb.insert( SongOpener.TABLE_NAME, null, newSongValue );
+            return newIdd;
+            }
+            return Long.parseLong( null );
+        }
 
     private void broweAritistPageById(int artist_id_url) {
         String  url="http://www.songsterr.com/a/wa/artist?id="+String.valueOf(artist_id_url);
@@ -171,7 +148,6 @@ public class SongDetailFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         //context will either be FragmentExample for a tablet, or EmptyActivity for phone
         parentActivity = (AppCompatActivity)context;
     }
