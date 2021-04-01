@@ -3,6 +3,9 @@ package com.cst2335.project01;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,10 @@ public class SongThirdActivity extends AppCompatActivity {
     ArrayList<SongEntity> songFavourateList = new ArrayList<>( );
     ListView songFaveListV ;
     FavoSongListAdapter myFaveSongAdapter;
+    SQLiteDatabase db;
+    private AppCompatActivity parentActivity;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,7 @@ public class SongThirdActivity extends AppCompatActivity {
 
         songFaveListV = findViewById(R.id.Favourate_listViewSong);
         songFaveListV.setAdapter( myFaveSongAdapter = new FavoSongListAdapter() );
+        loadDataFromDatabase();
         myFaveSongAdapter.notifyDataSetChanged();
 
         songFaveListV.setOnItemClickListener( (parent, view, position, id) -> {
@@ -140,26 +148,38 @@ public class SongThirdActivity extends AppCompatActivity {
 
             //add the new Contact to the array list:
             // contactsList.add(new Contact(name, email, id));
-            songList.add(new SongEntity( songTitle, songId, artistName, artistId, id));
+            songFavourateList.add(new SongEntity( songTitle, songId, artistName, artistId, id));
 
         }
 
         //At this point, the contactsList array has loaded every row from the cursor.
     }
+
+
+
+
+
+
+
+
+
     protected void updateSong(SongEntity s)
     {
         //Create a ContentValues object to represent a database row:
         ContentValues updatedValues = new ContentValues();
-        updatedValues.put(MyOpener.COL_NAME, c.getName());
-        updatedValues.put(MyOpener.COL_EMAIL, c.getEmail());
+        updatedValues.put(SongOpener.COL_SONGID, s.getSongId());
+        updatedValues.put(SongOpener.COL_SONGTITLE, s.getSongTitle());
+        updatedValues.put(SongOpener.COL_ARTISTID, s.getArtistId());
+        updatedValues.put(SongOpener.COL_ARTISTNAME, s.getArtistName());
+
 
         //now call the update function:
-        db.update(MyOpener.TABLE_NAME, updatedValues, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
+        db.update(SongOpener.TABLE_NAME, updatedValues, SongOpener.COL_ID + "= ?", new String[] {Long.toString(s.getId())});
     }
 
-    protected void  deleteSongEntityFromDB((SongEntity c)
+    protected void  deleteSongEntityFromDB(SongEntity s)
     {
-        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
+        db.delete(SongOpener.TABLE_NAME, SongOpener.COL_ID + "= ?", new String[] {Long.toString(s.getId())});
     }
 
 
