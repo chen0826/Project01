@@ -82,9 +82,7 @@ public class SongActivity extends AppCompatActivity {
         songListV = findViewById(R.id.listViewSong);
         songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
         mySongAdapter.notifyDataSetChanged();
-       // songListV.setOnItemClickListener( (parent, view, position, id) -> {
-       //   showSong (position);
-      //  }   );
+
 
         boolean isTablet = findViewById( R.id.fragmentLocation_song) != null; //check if the FrameLayout is loaded
         songListV.setOnItemClickListener( (parent, view, position, id) -> {
@@ -123,122 +121,7 @@ public class SongActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-    }
-/*
-    private void loadDataFromDatabase()
-    {
-        //get a database connection:
-        SongOpener dbOpener = new SongOpener( this);
-        db = dbOpener.getWritableDatabase(); //This calls onCreate() if you've never built the table before, or onUpgrade if the version here is newer
-
-
-        // We want to get all of the columns. Look at MyOpener.java for the definitions:
-       //String [] columns = {MyOpener.COL_ID, MyOpener.COL_EMAIL, MyOpener.COL_NAME};
-        String [] columns = {SongOpener.COL_ID, SongOpener.COL_SONGTITLE, SongOpener.COL_SONGID,
-                SongOpener.COL_ARTISTNAME, SongOpener.COL_ARTISTID };
-
-        //query all the results from the database:
-        Cursor results = db.query(false, SongOpener.TABLE_NAME, columns, null, null, null, null, null, null);
-
-        //Now the results object has rows of results that match the query.
-        //find the column indices:
-        int songTitleColumnIndex = results.getColumnIndex(SongOpener.COL_SONGTITLE);
-        int songIdColIndex = results.getColumnIndex(SongOpener.COL_SONGID);
-        int artistNameColumnIndex = results.getColumnIndex(SongOpener.COL_ARTISTNAME);
-        int artistIdColIndex = results.getColumnIndex(SongOpener.COL_ARTISTID);
-        int idColIndex = results.getColumnIndex(SongOpener.COL_ID);
-
-        //iterate over the results, return true if there is a next item:
-        while(results.moveToNext())
-        {
-            String songTitle = results.getString(songTitleColumnIndex );
-            int songId = results.getInt(songIdColIndex);
-            String artistName = results.getString(artistNameColumnIndex);
-            int artistId = results.getInt(artistIdColIndex );
-            long id = results.getLong(idColIndex);
-
-            //add the new Contact to the array list:
-           // contactsList.add(new Contact(name, email, id));
-            songList.add(new SongEntity( songTitle, songId, artistName, artistId, id));
-
-        }
-
-        //At this point, the contactsList array has loaded every row from the cursor.
-    }
-*/
-/*
-    protected void showSong(int position)
-    {
-
-        SongEntity selectedSong = songList.get(position);
-        View song_view = getLayoutInflater().inflate(R.layout.selected_song_dialog, null);
-
-        TextView songId=song_view.findViewById(R.id.row_songId_d);
-        TextView songtitle=song_view.findViewById(R.id.row_songTitle_d);
-        TextView artistName=song_view.findViewById(R.id.row_artistName_d);
-        TextView artistId=song_view.findViewById(R.id.row_artistId_d);
-
-        songId.setText("songID:"+String.valueOf( selectedSong.getSongId()));
-        songtitle.setText("Title: "+selectedSong.getSongTitle());
-        artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
-        artistName.setText("artist name: "+ selectedSong.getArtistName());
-
-        Bundle dataToPass = new Bundle();
-        dataToPass.putString(ITEM_SELECTED, source.get(position) );
-        dataToPass.putInt(ITEM_POSITION, position);
-        dataToPass.putLong(ITEM_ID, id);
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You clicked on Song #" + position)
-                .setMessage("You like save it to your favorite?")
-                .setView(song_view) //add the 3 edit texts showing the contact information
-                .setPositiveButton("Yes", (click, b) -> {
-
-                })
-                .setNegativeButton("No", (click, b) -> {
-                   // deleteContact(selectedContact); //remove the contact from database
-                  //  contactsList.remove(position); //remove the contact from contact list
-                  //  myAdapter.notifyDataSetChanged(); //there is one less item so update the list
-                })
-                .setNeutralButton("dismiss", (click, b) -> {
-
-
-                })
-                .create().show();
-
-
-    }
- */
-
-/*
-    protected void updateSong(SongEntity s)
-    {
-        //Create a ContentValues object to represent a database row:
-        ContentValues updatedValues = new ContentValues();
-        updatedValues.put(MyOpener.COL_NAME, c.getName());
-        updatedValues.put(MyOpener.COL_EMAIL, c.getEmail());
-
-        //now call the update function:
-        db.update(MyOpener.TABLE_NAME, updatedValues, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
-    }
-
-    protected void deleteContact(Contact c)
-    {
-        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(c.getId())});
-    }
-
-*/
-
-
-
-    static class MySongListAdapter extends BaseAdapter {
+     class MySongListAdapter extends BaseAdapter {
 
         public int getCount() { return songList.size();}
 
@@ -273,7 +156,7 @@ public class SongActivity extends AppCompatActivity {
         }
     }
 
-    private class MySongHTTPRequest extends AsyncTask< String, Integer, String>
+    class MySongHTTPRequest extends AsyncTask< String, Integer, String>
     {
         //Type3                Type1
         public String doInBackground(String ... args)
