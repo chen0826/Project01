@@ -20,24 +20,5 @@ public class SongSecondActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragmentLocation, songDFragment)
                 .commit();
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
 }

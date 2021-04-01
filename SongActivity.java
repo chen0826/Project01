@@ -1,4 +1,4 @@
-//package com.cst2335.project01;
+package com.cst2335.project01;//package com.cst2335.project01;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
@@ -238,7 +238,7 @@ public class SongActivity extends AppCompatActivity {
 
 
 
-            class MySongListAdapter extends BaseAdapter {
+    static class MySongListAdapter extends BaseAdapter {
 
         public int getCount() { return songList.size();}
 
