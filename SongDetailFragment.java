@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import com.cst2335.project01.SongActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,25 +30,30 @@ public class SongDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         dataFromActivity = getArguments();
-        id = dataFromActivity.getLong(FragmentExample.ITEM_ID );
+        id = dataFromActivity.getLong(SongActivity.ITEM_ID );
 
         // Inflate the layout for this fragment
-        View result =  inflater.inflate(R.layout.fragment_detail, container, false);
+        View result =  inflater.inflate(R.layout.fragment_song_detail, container, false);
 
-        //show the message
-        TextView message = (TextView)result.findViewById(R.id.message);
-        message.setText(dataFromActivity.getString(FragmentExample.ITEM_SELECTED));
-
+        //show thesong infor
+        TextView songTitle = (TextView)result.findViewById(R.id.row_songTitle_f);
+        songTitle.setText(dataFromActivity.getString(SongActivity.ITEM_SONG_TITLE));
+        TextView songId = (TextView)result.findViewById(R.id.row_songId_f);
+        songId.setText(dataFromActivity.getInt(SongActivity.ITEM_SONG_ID));
+        TextView artistName = (TextView)result.findViewById(R.id.row_artistName_f);
+        artistName.setText(dataFromActivity.getString(SongActivity.ITEM_ARTIST_NAME));
+        TextView artistId = (TextView)result.findViewById(R.id.row_artistId_f);
+        artistId.setText(dataFromActivity.getInt(SongActivity.ITEM_ARTIST_ID));
         //show the id:
-        TextView idView = (TextView)result.findViewById(R.id.idText);
-        idView.setText("ID=" + id);
+        TextView idView = (TextView)result.findViewById(R.id.row_head);
+        idView.setText("Song From List ID=" + id);
 
         // get the delete button, and add a click listener:
-        Button finishButton = (Button)result.findViewById(R.id.finishButton);
-        finishButton.setOnClickListener( clk -> {
+        Button tofavorateButton = (Button)result.findViewById(R.id.tofaverateButton);
+        tofavorateButton.setOnClickListener( clk -> {
 
             //Tell the parent activity to remove
-            parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+           // parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
         });
 
         return result;

@@ -1,4 +1,4 @@
-package com.cst2335.project01;
+//package com.cst2335.project01;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
@@ -20,6 +20,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.cst2335.project01.R;
+import com.cst2335.project01.SongEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +53,7 @@ public class SongActivity extends AppCompatActivity {
     public static final String ITEM_SONG_ID = "SONGID";
     public static final String  ITEM_ARTIST_NAME= "ARTISTNAME";
     public static final String  ITEM_ARTIST_ID= "ARTISTID";
+    public static final String  ITEM_ID= "ITEMID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +86,18 @@ public class SongActivity extends AppCompatActivity {
        //   showSong (position);
       //  }   );
 
-        boolean isTablet = findViewById(R.id.fragmentLocation_song) != null; //check if the FrameLayout is loaded
+        boolean isTablet = findViewById( R.id.fragmentLocation_song) != null; //check if the FrameLayout is loaded
         songListV.setOnItemClickListener( (parent, view, position, id) -> {
 
             SongEntity selectedSong = songList.get(position);
-            Bundle dataToPass = new Bundle();
+            long ii =mySongAdapter.getItemId(position);
 
+            Bundle dataToPass = new Bundle();
             dataToPass.putString( ITEM_SONG_TITLE, selectedSong.getSongTitle());
             dataToPass.putInt( ITEM_SONG_ID, selectedSong.getSongId() );
             dataToPass.putString( ITEM_ARTIST_NAME, selectedSong.getArtistName());
             dataToPass.putInt( ITEM_ARTIST_ID, selectedSong.getArtistId() );
-
+            dataToPass.putLong( ITEM_ID, ii );
            /*
             songId.setText("songID:"+String.valueOf( selectedSong.getSongId()));
             songtitle.setText("Title: "+selectedSong.getSongTitle());
