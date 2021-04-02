@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,6 +24,12 @@ public class SongThirdActivity extends AppCompatActivity {
     SQLiteDatabase db;
     private AppCompatActivity parentActivity;
 
+    public static final String ITEM_SONG_TITLE = "SONGTITLE";
+    public static final String ITEM_SONG_ID = "SONGID";
+    public static final String ITEM_ARTIST_NAME = "ARTISTNAME";
+    public static final String ITEM_ARTIST_ID = "ARTISTID";
+    public static final String ITEM_ID = "ITEMID";
+    public static final String ISBACK = "ISBACK";
 
 
     @Override
@@ -70,7 +77,7 @@ public class SongThirdActivity extends AppCompatActivity {
             songId.setText( "songID: " +String.valueOf(songRow.getSongId()));
             artistName.setText( "artist name: "+ songRow.getArtistName());
             artistId.setText( "artistID: "+ String.valueOf(songRow.getArtistId()));
-            rowId.setText("list No:" +String.valueOf(songRow.getId()) );
+            rowId.setText("songDB No:" +String.valueOf(songRow.getId()) );
 
             return newView;
         }
@@ -90,10 +97,19 @@ public class SongThirdActivity extends AppCompatActivity {
         songtitle.setText("Title: "+selectedSong.getSongTitle());
         artistId.setText("artistID: "+ String.valueOf(selectedSong.getArtistId()));
         artistName.setText("artist name: "+ selectedSong.getArtistName());
+        long idDB= selectedSong.getId();
+        long iiRow = myFaveSongAdapter.getItemId( position );
 
+        Bundle dataToPass = new Bundle();
+        dataToPass.putString( ITEM_SONG_TITLE, selectedSong.getSongTitle() );
+        dataToPass.putInt( ITEM_SONG_ID, selectedSong.getSongId() );
+        dataToPass.putString( ITEM_ARTIST_NAME, selectedSong.getArtistName() );
+        dataToPass.putInt( ITEM_ARTIST_ID, selectedSong.getArtistId() );
+        dataToPass.putLong( ITEM_ID, idDB );
+        dataToPass.putBoolean( ISBACK, true );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You clicked on Song #" + position)
+        builder.setTitle("You clicked onFavorite Song row#" + iiRow+"DB id"+idDB)
                 .setMessage("You like remove it from your favorite?")
                 .setView(song_view) //add the 3 edit texts showing the contact information
                 .setPositiveButton("Yes", (click, b) -> {
@@ -107,7 +123,17 @@ public class SongThirdActivity extends AppCompatActivity {
                     //  //there is one less item so update the list
                 })
                 .setNeutralButton("back to pre-page", (click, b) -> {
-                    finish();
+                   // Intent backtoLogin = new Intent();
+                  //  backtoLogin.putExtras( dataToPass ); //send data to intent
+                  //  setResult( 500, backtoLogin );
+                   // finish();
+
+                    Intent backActivity = new Intent( SongThirdActivity.this, SongSecondActivity.class );
+                    backActivity.putExtras( dataToPass ); //send data to next activity
+                    //setResult( 500, backActivity );
+                   // startActivityForResult( backActivity,222, dataToPass ); //make the transition
+                    startActivity(backActivity);
+                  //  finish();
                 })
                 .create().show();
 
@@ -177,7 +203,7 @@ public class SongThirdActivity extends AppCompatActivity {
         db.update(SongOpener.TABLE_NAME, updatedValues, SongOpener.COL_ID + "= ?", new String[] {Long.toString(s.getId())});
     }
 
-    protected void  deleteSongEntityFromDB(SongEntity s)
+    public  void  deleteSongEntityFromDB(SongEntity s)
     {
         db.delete(SongOpener.TABLE_NAME, SongOpener.COL_ID + "= ?", new String[] {Long.toString(s.getId())});
     }

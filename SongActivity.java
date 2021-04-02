@@ -54,6 +54,7 @@ public class SongActivity extends AppCompatActivity {
     public static final String ITEM_ARTIST_NAME = "ARTISTNAME";
     public static final String ITEM_ARTIST_ID = "ARTISTID";
     public static final String ITEM_ID = "ITEMID";
+    public static final String ISBACK = "ISBACK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class SongActivity extends AppCompatActivity {
             dataToPass.putString( ITEM_ARTIST_NAME, selectedSong.getArtistName() );
             dataToPass.putInt( ITEM_ARTIST_ID, selectedSong.getArtistId() );
             dataToPass.putLong( ITEM_ID, ii );
-
+            dataToPass.putBoolean( ISBACK, false );
 
             if (isTablet) {
                 SongDetailFragment dFragment = new SongDetailFragment(); //add a DetailFragment
