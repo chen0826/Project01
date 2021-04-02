@@ -67,7 +67,7 @@ public class SongDetailFragment extends Fragment {
         id = dataFromActivity.getLong(SongActivity.ITEM_ID );
 
         //show the id:
-        idView.setText("Song From searchList ID=" + id);
+        idView.setText("Song From searchList or DB ID=" + id);
         songTitleV.setText(dataFromActivity.getString(SongActivity.ITEM_SONG_TITLE));
         songIdV.setText(String.valueOf(dataFromActivity.getInt(SongActivity.ITEM_SONG_ID)));
         artistNameV.setText(dataFromActivity.getString(SongActivity.ITEM_ARTIST_NAME));
@@ -106,7 +106,7 @@ public class SongDetailFragment extends Fragment {
         deleBtn.setOnClickListener( clk -> {
             Log.i( "button ", "ddddddddd!!!!!!!!!!!!!!!!!!!!!!");
 
-            deleteSongEntityFromDBbyID(idDb);
+            deleteSongEntityFromDBbyID(id);
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
                 });
 
@@ -121,11 +121,11 @@ public class SongDetailFragment extends Fragment {
             startActivityForResult(nextActivity, REQUIRED_CODE); //make the transition
         });
 
-        if(dataFromActivity.getBoolean(SongActivity.ISBACK)){
+        if(dataFromActivity.getBoolean(SongThirdActivity.ISBACK)){
             saveBtn.setVisibility(View.GONE);
             deleBtn.setVisibility( View.VISIBLE );
-            idDb = dataFromThirdActivity.getLong(SongThirdActivity.ITEM_ID );
-            idView.setText("Song From FavouriteList ID=" + idDb);
+          //  idDb = dataFromThirdActivity.getLong(SongThirdActivity.ITEM_ID );
+            idView.setText("Song From FavouriteDB ID=" + id);
         };
 
         return resultViewFinal;
