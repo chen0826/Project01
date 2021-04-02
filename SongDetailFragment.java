@@ -107,7 +107,9 @@ public class SongDetailFragment extends Fragment {
             Log.i( "button ", "ddddddddd!!!!!!!!!!!!!!!!!!!!!!");
 
             deleteSongEntityFromDBbyID(id);
+            makeToastnotice( "it deleted from your database" );
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+            makeToastnotice( "it deleted from your database" );
                 });
 
 
@@ -130,30 +132,6 @@ public class SongDetailFragment extends Fragment {
 
         return resultViewFinal;
     }
-/*
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data );
-
-        if( requestCode == REQUIRED_CODE && resultCode == 500 ){
-            saveBtn.setVisibility(View.GONE);
-            deleBtn.setVisibility( View.VISIBLE );
-
-            dataFromThirdActivity = getArguments();
-            idDb = dataFromThirdActivity.getLong(SongThirdActivity.ITEM_ID );
-
-            //show the id:
-            idView.setText("Song From FavouriteList ID=" + idDb);
-            songTitleV.setText(dataFromThirdActivity.getString(SongThirdActivity.ITEM_SONG_TITLE));
-            songIdV.setText(String.valueOf(dataFromThirdActivity.getInt(SongThirdActivity.ITEM_SONG_ID)));
-            artistNameV.setText(dataFromThirdActivity.getString(SongThirdActivity.ITEM_ARTIST_NAME));
-            artistIdV.setText(String.valueOf(dataFromThirdActivity.getInt(SongThirdActivity.ITEM_ARTIST_ID)));
-
-
-            int e = Log.e( "RESLUT", "In function"+dataFromThirdActivity.getString(SongThirdActivity.ITEM_SONG_TITLE) );
-        }
-
-    }
-*/
     private void makeToastnotice(String  msg) {
         Toast toast = Toast.makeText( parentActivity.getApplicationContext(),
                 msg, Toast.LENGTH_LONG );
