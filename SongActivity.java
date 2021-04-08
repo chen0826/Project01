@@ -2,6 +2,7 @@ package com.cst2335.project01;//package com.cst2335.project01;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.KeyboardView;
 import android.os.AsyncTask;
@@ -114,6 +115,25 @@ public class SongActivity extends AppCompatActivity {
             }
         } );
     }
+
+
+    protected void onResume(){
+        super.onResume();
+        SharedPreferences sh= getSharedPreferences( "MySharedPref", MODE_PRIVATE );
+        String s1=sh.getString("searchView", " ");
+        searchView.setText(s1);
+    }
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences sharedPreferences=getSharedPreferences( "MySharedPref", MODE_PRIVATE );
+        SharedPreferences.Editor myEdit=sharedPreferences.edit();
+        myEdit.putString("searchView", searchView.getText().toString());
+        myEdit.apply();
+
+    }
+
+
+
 
     class MySongListAdapter extends BaseAdapter {
 
