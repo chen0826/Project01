@@ -189,12 +189,19 @@ public class SongDetailFragment extends Fragment {
     private void popHelpWindow() {
 
        StringBuilder helpMsg=new StringBuilder("HELP TIPS");
+        helpMsg.append("\n");
        helpMsg.append("if you click song ID , you will go to the music gitar notes with play function.");
        helpMsg.append("\n");
        helpMsg.append("if you click artist ID , you will go to the artist songlist and further");
+        helpMsg.append("\n");
+        helpMsg.append("click the save to favorite to save to dabtabase song favoriate ");
+        helpMsg.append("\n");
+        helpMsg.append("click go to favorite to see list of favoriate song  dabtabase ");
+
+
         //String msg=" iiiihelp help";
         AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder( getContext());
-        alertDialogBuilder.setTitle( "HELP Notice" )
+        alertDialogBuilder.setTitle( "HELP Menu" )
            .setMessage(helpMsg.toString());
        // .setMessage( msg );
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -204,7 +211,8 @@ public class SongDetailFragment extends Fragment {
 
     private void makeToastnotice(String  msg) {
 
-        Toast toast = Toast.makeText( parentActivity.getApplicationContext(),
+       // Toast toast = Toast.makeText( parentActivity.getApplicationContext(),
+        Toast toast = Toast.makeText( getContext(),
                 msg,
                // HtmlCompact.fromHtml("<font color='red'> msg </font>".
               //          HtmlCompact.FROM_HTML_MODE_LEGACY);
