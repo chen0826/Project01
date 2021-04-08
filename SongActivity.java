@@ -70,8 +70,8 @@ public class SongActivity extends AppCompatActivity {
 
         searchBtn.setOnClickListener( click -> {
 
-            String searchterm = "";
-            searchterm = searchView.getText().toString();
+           // String searchterm = "";
+            String searchterm = searchView.getText().toString();
             // http://www.songsterr.com/a/ra/songs.xml?pattern=XXX
             // http://www.songsterr.com/a/ra/songs.json?pattern=XXX
             String songJsonURL = "https://www.songsterr.com/a/ra/songs.json?pattern=" + searchterm;
@@ -245,7 +245,7 @@ public class SongActivity extends AppCompatActivity {
             //songListV.setAdapter( mySongAdapter = new MySongListAdapter() );
             mySongAdapter.notifyDataSetChanged();
             progressBarSong.setVisibility( View.GONE );
-            searchView.setText( "" );
+           // searchView.setText( "" );
         }
     }
 
