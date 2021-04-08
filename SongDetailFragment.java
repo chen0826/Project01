@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 //import android.support.design.widget.Snackbar;
 //import android.support.design.widget.CoordinatorLayout;
 
@@ -57,22 +61,32 @@ public class SongDetailFragment extends Fragment {
     TextView artistNameV ;
     TextView artistIdV ;
     TextView idView ;
+    Toolbar  songHelpBar;
+    Menu songMenu;
+   // private Object AppCompatActivity;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
-
         // Inflate the layout for this fragment
         View resultView =  inflater.inflate(R.layout.fragment_song_detail, container, false);
         //show thesong infor
         final View resultViewFinal = resultView;
 
-        Toolbar songToolbar=(Toolbar)resultViewFinal.findViewById(R.id.toolbar_song);
-        parentActivity.setSupportActionBar(songToolbar);
+        songHelpBar=(Toolbar)resultViewFinal.findViewById( R.id.toolbar_song );
+        songHelpBar.inflateMenu( R.menu.song_menu );
+        songMenu=songHelpBar.getMenu();
+        // ((AppCompatActivity) getActivity()).getDelegate().setSupportActionBar(songHelpBar);
+        //parentActivity.getDelegate().setSupportActionBar(songHelpBar);
+        songHelpBar.setOnMenuItemClickListener( new Toolbar.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                songHelpBarAction(item);
+                return false;
+            }
+        });
 
          songTitleV = (TextView) resultViewFinal.findViewById(R.id.row_songTitle_f);
          songIdV = (TextView) resultViewFinal.findViewById(R.id.row_songId_f);
@@ -153,28 +167,40 @@ public class SongDetailFragment extends Fragment {
         return resultViewFinal;
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflaterSong =parentActivity.getMenuInflater();
-        inflaterSong.inflate( R.menu.song_menu, menu);
-       // MenuInflater inflater = getMenuInflater();
-        return true;
-    }
- /*
-    public boolean onOptionsItemSelected(MenuItem item) {
-        String message = null;
-        //Look at your menu XML file. Put a case for every id in that file:
-        switch (item.getItemId()) {
+    private void songHelpBarAction(MenuItem item) {
+      //  String msg=null;
+        switch(item.getItemId())
+        {
             //what to do when the menu item is selected:
             case R.id.help_item:
-                message = "You clicked help icon";
+                popHelpWindow();
+             //   msg = "You clicked help icon";
+                break;
+            case R.id.backtosearch_item:
+                Intent backActivity = new Intent( getContext(), SongActivity.class);
+                startActivity(backActivity);
+             //  msg = "You clicked on backtosearch page";
                 break;
         }
+       // makeToastnotice(msg);
 
-        Toast.makeText(parentActivity.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-        return true;
     }
-*/
+
+    private void popHelpWindow() {
+
+       StringBuilder helpMsg=new StringBuilder("HELP TIPS");
+       helpMsg.append("if you click song ID , you will go to the music gitar notes with play function.");
+       helpMsg.append("\n");
+       helpMsg.append("if you click artist ID , you will go to the artist songlist and further");
+        //String msg=" iiiihelp help";
+        AlertDialog.Builder  alertDialogBuilder = new AlertDialog.Builder( getContext());
+        alertDialogBuilder.setTitle( "HELP Notice" )
+           .setMessage(helpMsg.toString());
+       // .setMessage( msg );
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
 
     private void makeToastnotice(String  msg) {
 
