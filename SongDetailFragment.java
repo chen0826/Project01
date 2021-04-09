@@ -181,6 +181,16 @@ public class SongDetailFragment extends Fragment {
                 startActivity(backActivity);
              //  msg = "You clicked on backtosearch page";
                 break;
+            case R.id.music_item:
+                Intent musicDB = new Intent( getContext(), SongThirdActivity.class);
+                startActivity(musicDB);
+                //  msg = "You clicked on backtosearch page";
+                break;
+
+
+       
+
+
         }
        // makeToastnotice(msg);
 
